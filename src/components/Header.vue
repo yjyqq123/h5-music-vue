@@ -44,9 +44,18 @@
         </van-row>
       </div>
       <div class="cover">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+
+        <van-swipe
+          class="my-swipe"
+          :autoplay="3000"
+          indicator-color="white"
+        >
+          <van-swipe-item>1</van-swipe-item>
+          <van-swipe-item>2</van-swipe-item>
+          <van-swipe-item>3</van-swipe-item>
+          <van-swipe-item>4</van-swipe-item>
+        </van-swipe>
+
       </div>
     </div>
     <van-button type="default">按钮</van-button>
@@ -55,8 +64,12 @@
 </template>
 
 <script>
+import sidebar from './Sidebar'
 export default {
   name: 'appheader',
+  components: {
+    sidebar
+  },
   data() {
     return {
       show: false,
@@ -81,20 +94,14 @@ export default {
 </script>
 
 <style scoped>
-/* #appheader {
-  display: flex;
-  justify-content: space-around;
+.my-swipe .van-swipe-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 150px;
+  text-align: center;
+  background-color: #39a9ed;
 }
-.icon {
-  flex: 2;
-}
-.wrap {
-  flex: 8;
-}
-.icon i {
-  font-size: 2rem;
-  cursor: pointer;
-} */
+
 .flex {
   width: 100%;
   display: flex;
@@ -130,6 +137,7 @@ export default {
 }
 
 .cover {
+  height: 200px;
   width: 100%;
   margin-top: 3rem;
 }

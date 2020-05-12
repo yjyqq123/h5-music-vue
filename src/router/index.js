@@ -11,6 +11,10 @@ const routes = [
   {
     path: '/footer',
     component: () => import('../components/Footer.vue')
+  },
+  {
+    path: '/login',
+    component: () => import('../components/Login.vue')
   }
 ]
 
