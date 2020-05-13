@@ -1,15 +1,19 @@
 <template>
-  <div
-    class="login"
-    :v-if="isshow"
-  >
+  <div class="bg">
     <van-nav-bar title="登陆" />
     <van-field
       label="账号"
       type="tel"
       clickable
-      v-model="validateForm.username"
+      v-model="validateForm.phoneNumber"
+      :rules="[{ required: true, message: '请填写手机号' }]"
       @touchstart.native.stop="show = true,show1=false"
+    />
+    <van-number-keyboard
+      v-model="validateForm.phoneNumber"
+      :show="show"
+      :maxlength="11"
+      @blur="show = false,show1=false"
     />
 
     <van-field
@@ -17,32 +21,27 @@
       type="password"
       clickable
       v-model="validateForm.password"
+      :rules="[{ required: true, message: '请填写密码' }]"
       @touchstart.native.stop="show1 = true,show=false"
     />
-
-    <van-field
-      v-model="verifyCode"
-      center
-      clearable
-      label="验证码"
-      placeholder="请输入验证码"
-      type="text"
-      autocapitalize="on"
-    >
-      <template #button>
-        <img
-          ref="image"
-          alt
-          @click="getVerify()"
-        />
-      </template>
-    </van-field>
-
-    <van-button
-      type="primary"
-      size="large"
-      @click="submit"
-    >登录</van-button>
+    <van-number-keyboard
+      v-model="validateForm.password"
+      :show="show1"
+      @blur="show1 = false,show=false"
+    />
+    <router-link to="/registered">
+      <p>还未注册？点击注册账号</p>
+    </router-link>
+    <div style="margin: 20px;">
+      <van-button
+        color="#c62f2f"
+        round
+        block
+        type="info"
+        native-type="submit"
+        @click="submit"
+      >登录</van-button>
+    </div>
   </div>
 </template>
 <script>
@@ -58,63 +57,44 @@ export default {
       password: '',
       show: false,
       show1: false,
-      show2: false,
       value: '',
       passvalue: '',
-      verifyCode: '',
       validateForm: {
-        username: '',
+        phoneNumber: '',
         password: ''
+      },
+      schema: {
+        phoneNumber: [
+          { required: true, error: '手机号不能为空' },
+          {
+            regex: /^1[3|4|5|6|7|8][0-0]{9}$/,
+            error: '手机号格式不正确'
+          }
+        ]
       },
       currentTime: '',
       user: {}
     }
   },
-  props: {
-    isshow: {
-      type: Boolean,
-      default: false
-    }
-  },
+
   methods: {
-    getVerify() {
-      this.currentTime = new Date().getTime()
-      this.axios({
-        method: 'get',
-        url: 'http://localhost:8080/captcha',
-        params: {
-          name: this.currentTime
-        },
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        responseType: 'blob'
-      }).then((res) => {
-        let img = this.$refs.image
-        let url = window.URL.createObjectURL(res.data)
-        img.src = url
-      })
-    },
     submit() {
       console.log(this.currentTime)
       this.axios({
         method: 'post',
-        url: 'http://localhost:8080/sysAdmin/login',
-        data: {
-          name: this.validateForm.username,
-          password: this.validateForm.password,
-          verifyCode: this.verifyCode
-        },
-        headers: {
-          Verify: this.currentTime
-        }
+        url:
+          'http://localhost:3000/login/cellphone?phone=' +
+          this.validateForm.phoneNumber +
+          '&password=' +
+          this.validateForm.password
       }).then((res) => {
         console.log(res.data)
-        if (res.data.code == 1) {
+        if (res.data.code == 200) {
           this.isshow = false
-          let data = res.data.data
+          let data = res.data
           localStorage.setItem('token', data.token)
           this.roles = data.roles
-          localStorage.setItem('user', JSON.stringify(data.user))
-          Toast(res.data.msg)
+          localStorage.setItem('user', JSON.stringify(data.profile))
           this.$router.push('/')
         } else {
           Toast(res.data.msg)
@@ -122,9 +102,11 @@ export default {
       })
     }
   },
-  created() {
-    this.getVerify()
-  },
+  created() {},
   components: {}
 }
 </script>
+<style scoped>
+.bg {
+}
+</style>

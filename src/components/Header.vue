@@ -12,7 +12,8 @@
             position="left"
             :style="{ width: '70%',height:'100%'}"
           >
-            <sidebar />
+
+            <Person></Person>
           </van-popup>
         </div>
         <div class="title">网易云音乐</div>
@@ -44,7 +45,6 @@
         </van-row>
       </div>
       <div class="cover">
-
         <van-swipe
           class="my-swipe"
           :autoplay="3000"
@@ -55,20 +55,18 @@
           <van-swipe-item>3</van-swipe-item>
           <van-swipe-item>4</van-swipe-item>
         </van-swipe>
-
       </div>
     </div>
     <van-button type="default">按钮</van-button>
-
   </div>
 </template>
 
 <script>
-import sidebar from './Sidebar'
 export default {
   name: 'appheader',
   components: {
-    sidebar
+    // eslint-disable-next-line vue/no-unused-components
+    Person: require('../components/Common/Person').default
   },
   data() {
     return {

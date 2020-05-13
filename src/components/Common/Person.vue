@@ -1,55 +1,46 @@
 <template>
-  <div id="sidebar">
+  <div id="person">
     <div class="header">
       <div class="img">
         <img
           ref="img"
-          :src="user.avatarUrl"
+          :src="users.avatarUrl"
           alt
         />
       </div>
       <div
         ref="name"
         class="name"
-      >{{user.signature}}</div>
+      >{{users.nickname}}</div>
     </div>
-    <div
-      ref="nickname"
-      class="nickname"
-    >{{user.nickname}}</div>
-
     <footer>
       <div
         class="imgicon"
-        @click="show = true"
+        v-show="istrue"
       >
-        <routh-link to="/login">
-          <van-button type="default">还未登录，点击登录</van-button>
-        </routh-link>
-
+        <router-link to="/login">
+          <van-button type="default">点击登录</van-button>
+        </router-link>
       </div>
       <div class="imgicon">
         <van-button
           type="default"
           @click="signout"
-        >退出</van-button>
+          v-show="!istrue"
+        >退出登录</van-button>
       </div>
     </footer>
   </div>
 </template>
 <script>
 export default {
-  name: 'sidebar',
-
+  name: 'person',
   data() {
     return {
-      user: [],
-      show: false,
       istrue: false,
       users: JSON.parse(localStorage.getItem('user'))
     }
   },
-  inject: ['reload'],
   methods: {
     nohave() {
       this.$toast('error')
@@ -57,9 +48,7 @@ export default {
     //   退出
     signout() {
       this.istrue = false
-      localStorage.removeItem('user')
-      this.reload()
-      this.$router.push('/')
+      this.$router.push('/login')
     }
   },
   mounted() {}
@@ -133,17 +122,5 @@ footer {
 }
 .iconfont {
   font-size: 3rem;
-}
-.wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.block {
-  width: 240px;
-  height: 300px;
-  background-color: #fff;
 }
 </style>
