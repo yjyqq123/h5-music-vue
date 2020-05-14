@@ -4,7 +4,11 @@
       <div class="image">
         <img src="../assets/logo.png" />
       </div>
-      <div class="geming">正在播放</div>
+      <div
+        class="geming"
+        style="color:rgb(250, 250, 250);
+        margin-top:-30px;"
+      >正在播放</div>
       <div class="playicon">
         <van-icon
           name="play-circle-o"
@@ -27,10 +31,11 @@ export default {
   height: 60px;
 }
 .wrap {
+  background-color: rgb(42, 41, 48);
   width: 100%;
   height: 60px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-content: center;
 }
 /* 歌的图像 */

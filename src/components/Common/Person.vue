@@ -12,7 +12,29 @@
         ref="name"
         class="name"
       >{{users.nickname}}</div>
+
     </div>
+    <van-row type="flex">
+      <van-col
+        offset="5"
+        span="12"
+      >ID：{{users.userId}}</van-col>
+
+    </van-row>
+    <van-row type="flex">
+      <van-col
+        offset="4"
+        span="8"
+      >被关：{{users.followeds}}</van-col>
+
+    </van-row>
+    <van-row type="flex">
+      <van-col
+        offset="4"
+        span="8"
+      >关注：{{users.follows}}</van-col>
+
+    </van-row>
     <footer>
       <div
         class="imgicon"
@@ -72,10 +94,10 @@ export default {
   border-radius: 50%;
 }
 .name {
-  font-size: 0.8rem;
+  font-size: 1.5rem;
   text-indent: 2rem;
   margin-left: 0.4rem;
-  color: rgb(41, 172, 196);
+  color: rgb(198, 47, 47);
 }
 .nickname {
   font-size: 0.8rem;

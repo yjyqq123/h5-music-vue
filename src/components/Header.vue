@@ -22,33 +22,11 @@
           </router-link>
         </div>
       </div>
-      <div class="wrap">
-        <van-row>
-          <router-link
-            to="/sheet"
-            tag="div"
-          >
-            <van-col>推荐</van-col>
-          </router-link>
-          <router-link
-            to="/ranking"
-            tag="div"
-          >
-            <van-col>歌单</van-col>
-          </router-link>
-          <router-link
-            to="/singer"
-            tag="div"
-          >
-            <van-col>歌手</van-col>
-          </router-link>
-        </van-row>
-      </div>
       <div class="cover">
         <van-swipe
           class="my-swipe"
           :autoplay="3000"
-          indicator-color="white"
+          indicator-color="black"
         >
           <van-swipe-item>1</van-swipe-item>
           <van-swipe-item>2</van-swipe-item>
@@ -56,9 +34,58 @@
           <van-swipe-item>4</van-swipe-item>
         </van-swipe>
       </div>
+      <div class="wrap">
+        <van-tabs v-model="active">
+          <van-tab title="推荐单曲">
+            <div
+              v-for="(item,index) in musics"
+              :key="index"
+            >
+              <van-card
+                :title="item.name"
+                :thumb="item.picUrl"
+              >
+                <div
+                  v-for="(user,index1) in item.song.artists"
+                  :key="index1"
+                >
+                  <div>作者：
+                    {{user.name}}</div>
+                </div>
+                <div>专辑名：{{item.song.album.name}}</div>
+              </van-card>
+            </div>
+          </van-tab>
+          <van-tab title="推荐歌单">
+            <div
+              v-for="(item,index) in musiclists.slice(10,20)"
+              :key="index"
+            >
+              <van-card
+                :title="item.name"
+                :thumb="item.picUrl"
+              >
+              </van-card>
+            </div>
+          </van-tab>
+          <van-tab title="每日电台">
+            <div
+              v-for="(item,index) in djprograms"
+              :key="index"
+            >
+              <van-card
+                :title="item.name"
+                :thumb="item.picUrl"
+              >
+              </van-card>
+            </div>
+          </van-tab>
+        </van-tabs>
+      </div>
     </div>
-    <van-button type="default">按钮</van-button>
+
   </div>
+
 </template>
 
 <script>
@@ -76,22 +103,56 @@ export default {
       text: '',
       digit: '',
       number: '',
-      password: ''
+      password: '',
+      musics: [],
+      musiclists: [],
+      djprograms: []
     }
   },
   methods: {
     showPopup() {
       this.show = true
     },
-    onConfirm(date) {
-      this.show = false
-      this.text = `选择了 ${date.length} 个日期`
+
+    getNewSongs() {
+      this.axios({
+        method: 'get',
+        url: 'http://localhost:3000/personalized/newsong'
+      }).then((res) => {
+        this.musics = res.data.result
+        console.log(this.musics)
+      })
+    },
+    getNewList() {
+      this.axios({
+        method: 'get',
+        url: 'http://localhost:3000/personalized?limit=20'
+      }).then((res) => {
+        this.musiclists = res.data.result
+        console.log(this.musiclists)
+      })
+    },
+    getDgProgram() {
+      this.axios({
+        method: 'get',
+        url: 'http://localhost:3000/personalized/djprogram'
+      }).then((res) => {
+        this.djprograms = res.data.result
+        console.log(this.djprograms)
+      })
     }
+  },
+  created() {
+    this.getNewSongs(), this.getNewList(), this.getDgProgram()
   }
 }
 </script>
 
 <style scoped>
+#appfooter {
+  width: 100%;
+  height: 60px;
+}
 .my-swipe .van-swipe-item {
   color: #fff;
   font-size: 20px;
@@ -120,10 +181,11 @@ export default {
 }
 .wrap {
   width: 100%;
-  background: rgb(42, 41, 48);
+  background-color: rgb(42, 41, 48);
   font-size: 0.8rem;
-  height: 2rem;
+  height: 100%;
 }
+
 .van-row {
   width: 100%;
   display: flex;
@@ -135,8 +197,7 @@ export default {
 }
 
 .cover {
-  height: 200px;
+  height: 150px;
   width: 100%;
-  margin-top: 3rem;
 }
 </style>

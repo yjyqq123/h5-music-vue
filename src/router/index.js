@@ -25,6 +25,10 @@ const routes = [
   {
     path: '/registered',
     component: () => import('../components/Registered.vue')
+  },
+  {
+    path: '/sheet',
+    component: () => import('../components/Common/sheet.vue')
   }
 ]
 
