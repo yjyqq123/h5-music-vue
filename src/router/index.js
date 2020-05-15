@@ -29,6 +29,10 @@ const routes = [
   {
     path: '/sheet',
     component: () => import('../components/Common/sheet.vue')
+  },
+  {
+    path: '/ranking',
+    component: () => import('../components/Common/ranking.vue')
   }
 ]
 

@@ -22,6 +22,28 @@
           </router-link>
         </div>
       </div>
+      <div class="wrap">
+        <van-row>
+          <router-link
+            to="/sheet"
+            tag="div"
+          >
+            <van-col>推荐</van-col>
+          </router-link>
+          <router-link
+            to="/ranking"
+            tag="div"
+          >
+            <van-col>排行榜</van-col>
+          </router-link>
+          <router-link
+            to="/singer"
+            tag="div"
+          >
+            <van-col>歌手</van-col>
+          </router-link>
+        </van-row>
+      </div>
       <div class="cover">
         <van-swipe
           class="my-swipe"
@@ -44,16 +66,26 @@
               <van-card
                 :title="item.name"
                 :thumb="item.picUrl"
-              >
-                <div
-                  v-for="(user,index1) in item.song.artists"
-                  :key="index1"
-                >
-                  <div>作者：
-                    {{user.name}}</div>
-                </div>
-                <div>专辑名：{{item.song.album.name}}</div>
+              ><template #desc>
+                  <div
+                    v-for="(user,index1) in item.song.artists"
+                    :key="index1"
+                  >
+                    <div>作者：
+                      {{user.name}}</div>
+                  </div>
+                  <div>专辑名：{{item.song.album.name}}</div>
+                </template>
+                <template #tag>
+                  <van-button
+                    icon="play-circle-o"
+                    size="primary"
+                    style="border:none;background-color:rgba(0,0,0,0);margin:50px 0px 0px 70px"
+                    @click="getPlay(item.id)"
+                  />
+                </template>
               </van-card>
+
             </div>
           </van-tab>
           <van-tab title="推荐歌单">
@@ -83,7 +115,13 @@
         </van-tabs>
       </div>
     </div>
-
+    <audio
+      ref='audio'
+      controls
+      autoplay
+    >
+      您的浏览器不支持 audio 元素。
+    </audio>
   </div>
 
 </template>
@@ -121,6 +159,22 @@ export default {
       }).then((res) => {
         this.musics = res.data.result
         console.log(this.musics)
+      })
+    },
+    getPlay(id) {
+      this.axios({
+        method: 'get',
+        url: 'http://localhost:3000/song/url?id=' + id
+      }).then((res) => {
+        this.list = res.data.data[0].url
+        this.getprogress = res.data.data[0].size
+        this.$refs.audio.src = this.list
+        this.axios({
+          method: 'get',
+          url: 'http://localhost:3000/song/detail?ids=' + id
+        }).then((result) => {
+          this.info[this.count++] = result.data.songs[0]
+        })
       })
     },
     getNewList() {
