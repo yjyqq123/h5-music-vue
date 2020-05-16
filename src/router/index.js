@@ -33,6 +33,14 @@ const routes = [
   {
     path: '/ranking',
     component: () => import('../components/Common/ranking.vue')
+  },
+  {
+    path: '/rankingdetail',
+    component: () => import('../components/Common/rankingdetail.vue')
+  },
+  {
+    path: '/mv',
+    component: () => import('../components/Common/musicvideos.vue')
   }
 ]
 

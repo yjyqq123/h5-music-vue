@@ -25,10 +25,10 @@
       <div class="wrap">
         <van-row>
           <router-link
-            to="/sheet"
+            to="/mv"
             tag="div"
           >
-            <van-col>推荐</van-col>
+            <van-col>MV</van-col>
           </router-link>
           <router-link
             to="/ranking"

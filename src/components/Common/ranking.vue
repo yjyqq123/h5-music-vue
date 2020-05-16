@@ -13,30 +13,12 @@
         </van-grid>
       </template>
     </van-nav-bar>
-
     <div>
-      <h4 class="about">推荐榜</h4>
-      <van-list>
-        <van-grid
-          clickable
-          :column-num="3"
-          icon-size="100px"
-        >
-          <van-grid-item
-            v-for="(item,index) in toplist.slice(4,10)"
-            :key="index"
-            :icon="item.coverImgUrl"
-            :text="item.name"
-          ></van-grid-item>
-
-        </van-grid>
-      </van-list>
-    </div>
-    <div>
-      <h4 class="about">每日榜</h4>
+      <h4 class="about">官方榜</h4>
       <div
         v-for="(item,index) in toplist.slice(0,4)"
         :key="index"
+        @click="getList(index)"
       >
         <van-card
           :thumb="item.coverImgUrl"
@@ -57,6 +39,25 @@
           </template></van-card>
       </div>
     </div>
+
+    <div>
+      <h4 class="about">推荐榜</h4>
+      <van-list>
+        <van-grid
+          clickable
+          :column-num="3"
+          icon-size="100px"
+        >
+          <van-grid-item
+            v-for="(item,index) in toplist.slice(4,10)"
+            :key="index"
+            :icon="item.coverImgUrl"
+            :text="item.name"
+            @click="getList(index+4)"
+          ></van-grid-item>
+        </van-grid>
+      </van-list>
+    </div>
     <div>
       <h4 class="about">全球榜</h4>
       <van-list>
@@ -70,11 +71,11 @@
             :key="index"
             :icon="item.coverImgUrl"
             :text="item.name"
+            @click="getList(index+10)"
           />
         </van-grid>
       </van-list>
     </div>
-
     <div>
       <h4 class="about">更多榜单</h4>
       <van-list>
@@ -84,10 +85,11 @@
           icon-size="100px"
         >
           <van-grid-item
-            v-for="(item,index) in toplist.slice(16)"
+            v-for="(item,index) in toplist.slice(16,34)"
             :key="index"
             :icon="item.coverImgUrl"
             :text="item.name"
+            @click="getList(index+16)"
           />
         </van-grid>
       </van-list>
@@ -116,9 +118,17 @@ export default {
         this.toplist = res.data.list
         this.rewardToplist = res.data.rewardToplist
         this.artistToplist = res.data.artistToplist
-        console.log(this.toplist)
-        console.log(this.rewardToplist)
-        console.log(this.artistToplist)
+        // console.log(this.toplist)
+      })
+    },
+    getList(id) {
+      this.axios({
+        method: 'get',
+        url: 'http://localhost:3000/top/list?idx=' + id
+      }).then((res) => {
+        console.log(res)
+        localStorage.setItem('rankingdetail', JSON.stringify(res.data.playlist))
+        this.$router.push('/rankingdetail')
       })
     }
   },
