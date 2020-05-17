@@ -21,12 +21,10 @@
           clickable
           :column-num="1"
         >
-          <van-button
-            icon="star-o"
-            type="primary"
-            color="#7232dd"
+          <button
+            class="btn"
             @click="showPopup"
-          >播放列表</van-button>
+          >播放列表</button>
         </van-grid>
       </template>
     </van-nav-bar>
@@ -169,3 +167,10 @@ export default {
   mounted() {}
 }
 </script>
+<style>
+.btn {
+  background-color: #ffffff;
+  color: #dd001b;
+  border: none;
+}
+</style>
